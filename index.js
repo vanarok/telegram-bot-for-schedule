@@ -1,7 +1,8 @@
+require('dotenv').config()
 const https = require('https');
 const TelegramBot = require('node-telegram-bot-api');
-const token = '***REMOVED***';
-const bot = new TelegramBot(token, {polling: true});
+const telegramToken = process.env.TELEGRAM_TOKEN;
+const bot = new TelegramBot(telegramToken, {polling: true});
 const months = [
   'января',
   'февраля',
@@ -17,7 +18,7 @@ const months = [
   'декабря'];
 
 bot.onText(/\/schedule (.+)/, async (msg, match) => {
-  bot.sendMessage(msg.chat.id, await urlSchedule(match[1]));
+  await bot.sendMessage(msg.chat.id, await urlSchedule(match[1]));
 });
 
 function urlSchedule(match) {
@@ -32,7 +33,7 @@ function urlSchedule(match) {
   if (match === 'aftertomorrow') {
     d = `${date.getDate() + 2} ${months[date.getMonth()]}.pdf`;
   }
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     const req = https.request(
         'https://ciur.ru/stmit/commondocs/' + encodeURIComponent(d),
         (res) => {
