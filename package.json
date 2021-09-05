@@ -4,14 +4,17 @@
   "description": "Собирает раписание с сайта техникума и выдает через бота в телеграмме",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "start": "node index.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "vanarok",
   "license": "ISC",
   "dependencies": {
     "dotenv": "^10.0.0",
-    "node-telegram-bot-api": "^0.54.0",
+    "node-telegram-bot-api": "^0.54.0"
+  },
+  "devDependencies": {
     "nodemon": "^2.0.12"
   }
 }
