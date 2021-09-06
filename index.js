@@ -35,10 +35,10 @@ function urlSchedule(match) {
   }
   return new Promise((resolve) => {
     const req = https.request(
-        'https://ciur.ru/stmit/commondocs/' + encodeURIComponent(d),
+        '' + encodeURIComponent(d),
         (res) => {
           if (res.statusCode === 404) resolve('Расписание еще не готово');
-          else resolve('https://ciur.ru/stmit/commondocs/' +
+          else resolve('https://ciur.ru/stmit/DocLib8/DocLib53/Forms/AllItems/' +
               encodeURIComponent(d));
         },
     );
