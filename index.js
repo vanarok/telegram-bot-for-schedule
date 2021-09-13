@@ -44,18 +44,22 @@ function urlSchedule(match) {
 
 const dateSchedule = new Date();
 
-setInterval(() => {
-  let nameFile = `Расписание ${dateSchedule.getDate()}.${dateSchedule.toLocaleString(
-      'default',
-      {month: '2-digit'})}.${dateSchedule.getFullYear()}.pdf`;
-  console.log(nameFile);
-  let req = https.request(url + encodeURIComponent(nameFile),
-      (res) => {
-        if (res.statusCode === 200) {
-          x.sendDocument(chatId, url + nameFile+'?random=58');
-          dateSchedule.setDate(dateSchedule.getDate() + 1);
-        }
-      },
-  );
-  req.end();
-}, 60000);
+try {
+  setInterval(() => {
+    let nameFile = `Расписание ${dateSchedule.getDate()}.${dateSchedule.toLocaleString(
+        'default',
+        {month: '2-digit'})}.${dateSchedule.getFullYear()}.pdf`;
+    console.log(nameFile);
+    let req = https.request(url + encodeURIComponent(nameFile),
+        (res) => {
+          if (res.statusCode === 200) {
+            x.sendDocument(chatId, url + nameFile + '?random=58');
+            dateSchedule.setDate(dateSchedule.getDate() + 1);
+          }
+        },
+    );
+    req.end();
+  }, 60000);
+} catch (err) {
+  console.log(err)
+}
