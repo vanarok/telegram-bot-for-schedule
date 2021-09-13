@@ -52,7 +52,7 @@ setInterval(() => {
   let req = https.request(url + encodeURIComponent(nameFile),
       (res) => {
         if (res.statusCode === 200) {
-          x.sendDocument(chatId, url + encodeURIComponent(nameFile)+'?random=58');
+          x.sendDocument(chatId, url + nameFile+'?random=58');
           dateSchedule.setDate(dateSchedule.getDate() + 1);
         }
       },
