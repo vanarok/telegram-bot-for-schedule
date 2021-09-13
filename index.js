@@ -49,7 +49,7 @@ setInterval(() => {
       'default',
       {month: '2-digit'})}.${dateSchedule.getFullYear()}.pdf`;
   console.log(nameFile);
-  let req = https.request(url + nameFile,
+  let req = https.request(url + encodeURIComponent(nameFile),
       (res) => {
         if (res.statusCode === 200) {
           x.sendDocument(chatId, url + encodeURIComponent(nameFile)+'?random=58');
