@@ -3,7 +3,7 @@ const https = require('https');
 const TelegramBot = require('node-telegram-bot-api');
 const telegramToken = process.env.TELEGRAM_TOKEN;
 const x = new TelegramBot(telegramToken, {polling: true});
-const chatId = -1001541014190; //831526627
+const chatId = 831526627//-1001541014190; //831526627
 const url = 'https://ciur.ru/stmit/commondocs/';
 
 x.onText(/\/id/, async (msg) => {
@@ -52,10 +52,10 @@ setInterval(() => {
   let req = https.request(url + nameFile,
       (res) => {
         if (res.statusCode === 200) {
-          x.sendDocument(chatId, url + nameFile+'?random=58');
+          x.sendDocument(chatId, url + encodeURIComponent(nameFile)+'?random=58');
           dateSchedule.setDate(dateSchedule.getDate() + 1);
         }
       },
   );
   req.end();
-}, 60000);
+}, 6000);
