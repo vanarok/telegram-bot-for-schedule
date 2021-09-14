@@ -43,6 +43,7 @@ function urlSchedule(match) {
 }
 
 const dateSchedule = new Date();
+dateSchedule.setDate(dateSchedule.getDate() + 1);
 
 try {
   setInterval(() => {
@@ -59,7 +60,7 @@ try {
         },
     );
     req.end();
-  }, 60000);
+  }, 600000);
 } catch (err) {
   console.log(err)
 }
