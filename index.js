@@ -3,7 +3,7 @@ const https = require('https');
 const TelegramBot = require('node-telegram-bot-api');
 const telegramToken = process.env.TELEGRAM_TOKEN;
 const bot = new TelegramBot(telegramToken, {polling: true});
-const chatId = 831526627; //-1001541014190; //831526627
+const chatId = -1001541014190; //831526627
 const url = 'https://ciur.ru/stmit/commondocs/';
 const {ImageMagick} = require('pdf-images');
 const dateSchedule = new Date();
@@ -85,4 +85,4 @@ setInterval(() => {
       },
   );
   req.end();
-}, 60000);
+}, 600000);
