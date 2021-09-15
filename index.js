@@ -62,7 +62,7 @@ function schedule(match) {
   });
 }
 
-dateSchedule.setDate(dateSchedule.getDate());
+dateSchedule.setDate(dateSchedule.getDate()+1);
 
 setInterval(() => {
   let nameFile = `Расписание ${dateSchedule.getDate()}.${dateSchedule.toLocaleString(
