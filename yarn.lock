@@ -1005,6 +1005,11 @@ package-json@^6.3.0:
     registry-url "^5.0.0"
     semver "^6.2.0"
 
+pdf-images@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/pdf-images/-/pdf-images-1.0.2.tgz#c39d57bbf43e392a4ddc8ec337cdc615ddfe2eb3"
+  integrity sha512-VcAfV3giAcjQqHTW5UhT2hUH8sip30jHFwLof4mtH6FgD7aOH5/uNuTaJLTff4aGmXQLBmX2/ZWtOOra2hRsbA==
+
 performance-now@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/performance-now/-/performance-now-2.1.0.tgz#6309f4e0e5fa913ec1c69307ae364b4b377c9e7b"

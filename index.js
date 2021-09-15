@@ -2,65 +2,87 @@ require('dotenv').config();
 const https = require('https');
 const TelegramBot = require('node-telegram-bot-api');
 const telegramToken = process.env.TELEGRAM_TOKEN;
-const x = new TelegramBot(telegramToken, {polling: true});
-const chatId = -1001541014190; //831526627
+const bot = new TelegramBot(telegramToken, {polling: true});
+const chatId = 831526627; //-1001541014190; //831526627
 const url = 'https://ciur.ru/stmit/commondocs/';
+const {ImageMagick} = require('pdf-images');
+const dateSchedule = new Date();
 
-x.onText(/\/id/, async (msg) => {
-  await x.sendMessage(msg.chat.id, msg.chat.id);
+bot.onText(/\/id/, async (msg) => {
+  await bot.sendMessage(msg.chat.id, msg.chat.id);
 });
 
-x.onText(/расписание (.+)/, async (msg, match) => {
-  await x.sendMessage(msg.chat.id, await urlSchedule(match[1]));
+bot.onText(/расписание (.+)/, async (msg, match) => {
+  let images = await schedule(match[1]);
+  if (typeof images === 'string') {
+    await bot.sendMessage(msg.chat.id, images);
+    return;
+  }
+  for (let i in images) {
+    console.log(images[i]);
+    await bot.sendPhoto(msg.chat.id, images[i]);
+  }
 });
 
-function urlSchedule(match) {
+function schedule(match) {
   let date = new Date();
-  let d = 0;
+  let nameFile = undefined;
+
   if (match === 'сегодня') {
-    d = `Расписание ${date.getDate()}.${date.toLocaleString('default',
+    nameFile = `Расписание ${date.getDate()}.${date.toLocaleString('default',
         {month: '2-digit'})}.${date.getFullYear()}.pdf`;
   }
   if (match === 'завтра') {
-    d = `Расписание ${date.getDate() + 1}.${date.toLocaleString('default',
+    nameFile = `Расписание ${date.getDate() + 1}.${date.toLocaleString(
+        'default',
         {month: '2-digit'})}.${date.getFullYear()}.pdf`;
   }
   if (match === 'послезавтра') {
-    d = `Расписание ${date.getDate() + 2}.${date.toLocaleString('default',
+    nameFile = `Расписание ${date.getDate() + 2}.${date.toLocaleString(
+        'default',
         {month: '2-digit'})}.${date.getFullYear()}.pdf`;
   }
+  nameFile = encodeURIComponent(nameFile);
+
   return new Promise((resolve) => {
-    const req = https.request(
-        url + encodeURIComponent(d),
+    let req = https.request(
+        url + nameFile,
         (res) => {
-          if (res.statusCode === 404) resolve('Расписание отсутствует');
-          else resolve(url +
-              encodeURIComponent(d));
+          if (res.statusCode === 200) {
+            let images = ImageMagick.convert(url +
+                nameFile, '/tmp', 'img').images;
+
+            resolve(images);
+          } else {
+            resolve('Расписание отсутствует');
+          }
         },
     );
     req.end();
   });
 }
 
-const dateSchedule = new Date();
-dateSchedule.setDate(dateSchedule.getDate() + 1);
+dateSchedule.setDate(dateSchedule.getDate());
 
-try {
-  setInterval(() => {
-    let nameFile = `Расписание ${dateSchedule.getDate()}.${dateSchedule.toLocaleString(
-        'default',
-        {month: '2-digit'})}.${dateSchedule.getFullYear()}.pdf`;
-    console.log(nameFile);
-    let req = https.request(url + encodeURIComponent(nameFile),
-        (res) => {
-          if (res.statusCode === 200) {
-            x.sendDocument(chatId, url + nameFile + '?random=58');
-            dateSchedule.setDate(dateSchedule.getDate() + 1);
+setInterval(() => {
+  let nameFile = `Расписание ${dateSchedule.getDate()}.${dateSchedule.toLocaleString(
+      'default',
+      {month: '2-digit'})}.${dateSchedule.getFullYear()}.pdf`;
+  nameFile = encodeURIComponent(nameFile);
+
+  let req = https.request(url + nameFile,
+      (res) => {
+        if (res.statusCode === 200) {
+          let images = ImageMagick.convert(url +
+              nameFile, '/tmp', 'img').images;
+
+          console.log(images);
+          for (let i in images) {
+            bot.sendPhoto(chatId, images[i]);
           }
-        },
-    );
-    req.end();
-  }, 600000);
-} catch (err) {
-  console.log(err)
-}
+          dateSchedule.setDate(dateSchedule.getDate() + 1);
+        }
+      },
+  );
+  req.end();
+}, 60000);
