@@ -1,6 +1,8 @@
 import 'dotenv/config';
 import got from 'got';
 import TelegramBot from 'node-telegram-bot-api';
+import {ImageMagick} from 'pdf-images';
+import {createWriteStream} from 'fs';
 
 const telegramToken = process.env.TELEGRAM_TOKEN;
 const bot = new TelegramBot(telegramToken, {polling: true});
@@ -92,27 +94,28 @@ function getSchedule(text) {
   let siteTwo = req(
       `http://stmit.ru/wp-content/uploads/2021/09/${nameFileSchedule(text)}`);
   if (siteOne) {
+    let pdfSchedule = siteOne.pipe(createWriteStream('schedule.pdf'));
+  } else {
 
   }
+  return;
 }
 
-function nameFileSchedule(text) {
-  let f = undefined;
+function nameFileSchedule(text, date) {
   if (text === 'сегодня') {
-    f = `Расписание ${date.getDate()}.${date.toLocaleString('default',
+    return `Расписание ${date.getDate()}.${date.toLocaleString('default',
         {month: '2-digit'})}.${date.getFullYear()}.pdf`;
   }
   if (text === 'завтра') {
-    f = `Расписание ${date.getDate() + 1}.${date.toLocaleString(
+    return `Расписание ${date.getDate() + 1}.${date.toLocaleString(
         'default',
         {month: '2-digit'})}.${date.getFullYear()}.pdf`;
   }
   if (text === 'послезавтра') {
-    f = `Расписание ${date.getDate() + 2}.${date.toLocaleString(
+    return `Расписание ${date.getDate() + 2}.${date.toLocaleString(
         'default',
         {month: '2-digit'})}.${date.getFullYear()}.pdf`;
   }
-  return f;
 }
 
 /**
