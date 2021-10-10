@@ -10,7 +10,7 @@ const bot = new TelegramBot(telegramToken, {polling: true});
 const chatId = -1001541014190;
 let nameFiles = [];
 
-setInterval(serviceSendingSchedule, 60000)
+setInterval(serviceSendingSchedule, 60000);
 
 bot.onText(/\/id/, async (msg) => {
   await bot.sendMessage(msg.chat.id, msg.chat.id);
@@ -28,7 +28,7 @@ async function serviceSendingSchedule() {
   const url = await getHref();
 
   if (!url.some(await matchingArrays)) {
-    nameFiles = []
+    nameFiles = [];
     nameFiles = nameFiles.concat(url);
     const images = await getImg(url);
     for (let i = 0; i < images.length; i++) {
