@@ -30,7 +30,6 @@ async function serviceSendingSchedule() {
   if (!url.some(await matchingArrays)) {
     nameFiles = []
     nameFiles = nameFiles.concat(url);
-    console.log(nameFiles)
     const images = await getImg(url);
     for (let i = 0; i < images.length; i++) {
       await bot.sendPhoto(chatId, images[i]);
