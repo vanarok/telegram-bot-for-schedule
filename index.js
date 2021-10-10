@@ -7,7 +7,7 @@ import * as fs from 'fs';
 
 const telegramToken = process.env.TELEGRAM_TOKEN;
 const bot = new TelegramBot(telegramToken, {polling: true});
-const chatId = 1001541014190;
+const chatId = -1001541014190;
 let nameFiles = [];
 
 setInterval(serviceSendingSchedule, 60000)
