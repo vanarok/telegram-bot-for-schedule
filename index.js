@@ -7,36 +7,39 @@ import * as fs from 'fs';
 
 const telegramToken = process.env.TELEGRAM_TOKEN;
 const bot = new TelegramBot(telegramToken, {polling: true});
-const chatId = 831526627; //-1001541014190;
-const nameFiles = [];
+const chatId = 1001541014190;
+let nameFiles = [];
 
-setInterval(async () => {
-  const url = await getHref();
-  if (!url.some(matchingArrays)) {
-    let arr = [];
-  for (let i = 0; i < url.length; i++) {
-    const path = `/tmp/${url[i].split('/')[7]}`;
-    const buffer = await fetchHtml(url[i]);
-    await saveToFile(path, buffer);
-    arr = arr.concat(
-        await ImageMagick.convert(path, '/tmp', 'schedule' + i).images);
-  }
-  return arr;}
-}, 10000);
+setInterval(serviceSendingSchedule, 60000)
 
 bot.onText(/\/id/, async (msg) => {
   await bot.sendMessage(msg.chat.id, msg.chat.id);
 });
 
 bot.onText(/\/расписание/, async (msg) => {
-  const images = await getImg();
+  await bot.sendMessage(msg.chat.id, 'Кручу верчю расписание найти хочу');
+  const images = await getImg(await getHref());
   for (let i = 0; i < images.length; i++) {
     await bot.sendPhoto(msg.chat.id, images[i]);
   }
 });
 
-async function getImg() {
+async function serviceSendingSchedule() {
   const url = await getHref();
+
+  if (!url.some(await matchingArrays)) {
+    nameFiles = []
+    nameFiles = nameFiles.concat(url);
+    console.log(nameFiles)
+    const images = await getImg(url);
+    for (let i = 0; i < images.length; i++) {
+      await bot.sendPhoto(chatId, images[i]);
+    }
+  }
+
+}
+
+async function getImg(url) {
   let arr = [];
   for (let i = 0; i < url.length; i++) {
     const path = `/tmp/${url[i].split('/')[7]}`;
