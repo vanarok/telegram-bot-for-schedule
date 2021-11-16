@@ -36,7 +36,7 @@ async function serviceSendingSchedule() {
     }
   }
 
-}
+ }
 
 async function getImg(url) {
   let arr = [];
